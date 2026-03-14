@@ -27,7 +27,7 @@ public class PantryClass : MonoBehaviour
         {
             for (int i = 0; i < food.Length; i++)
             {
-                food[i] = UnityEngine.Random.Range(0, 10);
+                food[i] = UnityEngine.Random.Range(0, 2) * (i + 1);
             }
         }
 

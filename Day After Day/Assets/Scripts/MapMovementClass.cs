@@ -16,8 +16,8 @@ public class MapMovementClass : MonoBehaviour
         LoopHandler = GameObject.Find("Game").GetComponent<LoopHandler>();
         // Ensure player begins at origin
         var pos = transform.position;
-        pos.x = 0;
-        pos.y = 0;
+        pos.x = currentPantry.gameObject.transform.position.x;
+        pos.y = currentPantry.gameObject.transform.position.y;
 
         playerDistanceTraveled = 0;
 
@@ -36,9 +36,9 @@ public class MapMovementClass : MonoBehaviour
                 // identify current pantry and verify proximity
                 var nextPantry = hit.collider.gameObject.GetComponent<PantryClass>();
                 var positions = nextPantry.transform.position;
-                double distance = Math.Sqrt(Math.Pow(transform.position.x-positions.x, 2)
+                float distance = (float) Math.Sqrt(Math.Pow(transform.position.x-positions.x, 2)
                                             + Math.Pow(transform.position.y-positions.y, 2));
-                double TravelTime = (distance * 100) % 10;
+                float TravelTime = (distance * 100) % 10;
 
                 // ensure the player has the time to reach this node
                 if (playerDistanceTraveled + TravelTime > LoopHandler.time)
@@ -68,6 +68,7 @@ public class MapMovementClass : MonoBehaviour
 
                     // move the player character to the new node
                     playerDistanceTraveled += TravelTime;
+                    LoopHandler.time += TravelTime;
                     transform.position = new Vector2(positions.x, positions.y);
                 } // if else
             } // if hit collider

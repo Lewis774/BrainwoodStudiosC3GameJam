@@ -76,6 +76,8 @@ public class UIHandler : MonoBehaviour
         int hours = timeInMinutes / 60;
         int minutes = timeInMinutes % 60;
 
+        minutes = (minutes / 15) * 15;
+
         string period = hours >= 12 ? "PM" : "AM";
 
         int displayHour = hours % 12;

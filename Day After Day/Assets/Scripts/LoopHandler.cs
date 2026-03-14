@@ -30,7 +30,7 @@ public class LoopHandler : MonoBehaviour
     // Update is called once user frame
     void Update()
     {
-        time += Time.deltaTime * 5;
+        time += Time.deltaTime * 6;
         uiHandler.UpdateTime((int) time);
     }
 

@@ -723,7 +723,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3223b038934318a4b805114c046e4fe1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameHandler
-  loopHandler: {fileID: 0}
   score: 0
   money: 2000
 --- !u!114 &545783815
@@ -738,8 +737,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea583061d71eb5e48b2d979b51bc4fbe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LoopHandler
-  UI: {fileID: 0}
-  uiHandler: {fileID: 0}
+  UI: {fileID: 1680109041}
   time: 480
   week: 0
   foodGathered: 

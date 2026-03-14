@@ -24,6 +24,7 @@ public class LoopHandler : MonoBehaviour
     void StartLoop(int week, int money)
     {
         uiHandler.UpdateMoney(money);
+        uiHandler.UpdateWeek(week);
         foodGathered = new int[5];
     }
 

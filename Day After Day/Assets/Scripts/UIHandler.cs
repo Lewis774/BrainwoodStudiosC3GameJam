@@ -6,9 +6,11 @@ using UnityEngine.UI;
 
 public class UIHandler : MonoBehaviour
 {
-    public TextMeshProUGUI  timeText;
+    public TextMeshProUGUI timeText;
 
-    public TextMeshProUGUI  moneyText; 
+    public TextMeshProUGUI moneyText; 
+
+    public TextMeshProUGUI weekText;
 
     public GameObject proteinBar;
 
@@ -17,6 +19,8 @@ public class UIHandler : MonoBehaviour
     public GameObject carbsBar;
 
     public GameObject fruitBar;
+
+    public GameObject dairyBar;
 
     private Color defaultGray;
 
@@ -27,6 +31,8 @@ public class UIHandler : MonoBehaviour
     private Color yellowGrain;
 
     private Color pinkFruit;
+
+    private Color dairyBlue;
 
     public GameObject[] bars;
 
@@ -39,9 +45,10 @@ public class UIHandler : MonoBehaviour
         vegetableGreen = new Color(73f/255f, 210f/255f, 86f/255f, 1f);
         yellowGrain = new Color(255f/255f, 231f/255f, 50f/255f, 1f);
         pinkFruit = new Color(255f/255f, 179f/255f, 186f/255f, 1f);
+        dairyBlue = new Color(119f/255f, 201f/255f, 255f/255f, 1f);
 
-        bars = new GameObject[4] {proteinBar, vegetableBar, carbsBar, fruitBar};
-        colors = new Color[4] {proteinRed, vegetableGreen, yellowGrain, pinkFruit};
+        bars = new GameObject[5] {proteinBar, vegetableBar, carbsBar, fruitBar, dairyBar};
+        colors = new Color[5] {proteinRed, vegetableGreen, yellowGrain, pinkFruit, dairyBlue};
 
         ResetBars();
     }
@@ -51,7 +58,8 @@ public class UIHandler : MonoBehaviour
         UpdateBar(proteinBar, 7, defaultGray);
         UpdateBar(vegetableBar, 7, defaultGray);
         UpdateBar(carbsBar, 7, defaultGray);
-        UpdateBar(fruitBar, 7, defaultGray);        
+        UpdateBar(fruitBar, 7, defaultGray);  
+        UpdateBar(dairyBar, 7, defaultGray);      
     }
 
 
@@ -91,4 +99,11 @@ public class UIHandler : MonoBehaviour
     {
         moneyText.text = "$  " + money;
     }
+
+    public void UpdateWeek(int week) 
+    {
+        weekText.text = "Week " + week;
+    }
+
 }
+

@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: e96dcf3608ed62e47987cf922bc67afb
+guid: 2c0a3cfdf67d7b34485f3cc76b4b53be
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 5266210578484325945
-    second: Day_After_Day_Map_0
+      213: 5539261851419572830
+    second: Day_After_Day_Map_4_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,7 +100,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Day_After_Day_Map_0
+      name: Day_After_Day_Map_4_0
       rect:
         serializedVersion: 2
         x: 0
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 93e66fa9e96551940800000000000000
-      internalID: 5266210578484325945
+      spriteID: e5a7cbb3e496fdc40800000000000000
+      internalID: 5539261851419572830
       vertices: []
       indices: 
       edges: []
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Day_After_Day_Map_0: 5266210578484325945
+      Day_After_Day_Map_4_0: 5539261851419572830
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

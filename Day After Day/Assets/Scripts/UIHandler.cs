@@ -62,7 +62,6 @@ public class UIHandler : MonoBehaviour
         UpdateBar(dairyBar, 7, defaultGray);      
     }
 
-
     public void UpdateBar(GameObject bar, int filled, Color color) 
     {
         Transform transform = bar.GetComponent<Transform>();

@@ -6,30 +6,34 @@ public class PantryClass : MonoBehaviour
    
     public int[] food;
     public PantryClass[] closestNodes;
+    public bool Jobable;
+    
+    
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         var allNodes = FindObjectsByType<PantryClass>(FindObjectsSortMode.None);
 
-        closestNodes = new PantryClass[4];
+        closestNodes = new PantryClass[5];
         for (int i = 0; i < closestNodes.Length; i++)
         {
             closestNodes[i] = getClosestNode(allNodes);
         }
-        food = new int[5];
-        if (tag == "Node")
+        food = new int[4];
+        
+        // Not a node and therefore a pantry
+        if (tag == "Pantry")
         {
-            // Any value or functionality that should be unique to Nodes specifically
-        } 
-        else
-        {
-            // Not a node and therefore a pantry
             for (int i = 0; i < food.Length; i++)
             {
-            food[i] = UnityEngine.Random.Range(0, 10);
+                food[i] = UnityEngine.Random.Range(0, 10);
             }
         }
+
+        Jobable = true;
+        
+    
     
     }
 

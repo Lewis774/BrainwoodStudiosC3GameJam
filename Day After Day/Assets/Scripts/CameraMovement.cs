@@ -10,7 +10,7 @@ public class CameraMovement : MonoBehaviour
     private Vector3 dragOrigin;
 
     public float zoomStep, minZoomSize, maxZoomSize;
-
+ 
     public SpriteRenderer mapRenderer;
 
     private float mapMinX, mapMaxX, mapMinY, mapMaxY;

@@ -28,7 +28,11 @@ public class UIHandler : MonoBehaviour
 
     private Color pinkFruit;
 
-    void Awake()
+    public GameObject[] bars;
+
+    public Color[] colors;
+
+    void Start()
     {
         defaultGray = new Color(204f/255f, 204f/255f, 204f/255f, 1f);
         proteinRed = new Color(255f/255f, 81f/255f, 81f/255f, 1f);
@@ -36,22 +40,22 @@ public class UIHandler : MonoBehaviour
         yellowGrain = new Color(255f/255f, 231f/255f, 50f/255f, 1f);
         pinkFruit = new Color(255f/255f, 179f/255f, 186f/255f, 1f);
 
+        bars = new GameObject[4] {proteinBar, vegetableBar, carbsBar, fruitBar};
+        colors = new Color[4] {proteinRed, vegetableGreen, yellowGrain, pinkFruit};
+
+        ResetBars();
+    }
+
+    void ResetBars()
+    {
         UpdateBar(proteinBar, 7, defaultGray);
         UpdateBar(vegetableBar, 7, defaultGray);
         UpdateBar(carbsBar, 7, defaultGray);
-        UpdateBar(fruitBar, 7, defaultGray);
-
-        UpdateBar(proteinBar, 2, proteinRed);
-        UpdateBar(vegetableBar, 3, vegetableGreen);
-        UpdateBar(carbsBar, 0, yellowGrain);
-        UpdateBar(fruitBar, 7, pinkFruit);
-
-        UpdateTime(490);
-        UpdateMoney(2130);
+        UpdateBar(fruitBar, 7, defaultGray);        
     }
 
 
-    void UpdateBar(GameObject bar, int filled, Color color) 
+    public void UpdateBar(GameObject bar, int filled, Color color) 
     {
         Transform transform = bar.GetComponent<Transform>();
 

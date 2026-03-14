@@ -7,7 +7,7 @@ public class LoopHandler : MonoBehaviour
 {
     public GameObject UI; 
 
-    public UIHandler uiHandler;
+    private UIHandler uiHandler;
 
     public float time = 480;
 
@@ -15,15 +15,19 @@ public class LoopHandler : MonoBehaviour
 
     public int[] foodGathered;
 
+    public void Start()
+    {
+        uiHandler = UI.GetComponent<UIHandler>();        
+    }
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void StartLoop(int week, int money)
     {
-        uiHandler = UI.GetComponent<UIHandler>();
         uiHandler.UpdateMoney(money);
         foodGathered = new int[5];
     }
 
-    // Update is called once per frame
+    // Update is called once user frame
     void Update()
     {
         time += Time.deltaTime * 5;

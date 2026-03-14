@@ -40,7 +40,7 @@ public class OpeningHandler : MonoBehaviour
 
         SetAlpha(logoImage, 0f);
 
-        yield return new WaitForSeconds(4f);
+        yield return new WaitForSeconds(2.5f);
 
         introMessage.SetActive(true);
 

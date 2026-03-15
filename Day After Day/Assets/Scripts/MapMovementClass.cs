@@ -1,6 +1,8 @@
 using UnityEngine;
 using System;
 using Unity.VisualScripting;
+using TMPro;
+using UnityEditorInternal;
 
 public class MapMovementClass : MonoBehaviour
 {
@@ -10,7 +12,6 @@ public class MapMovementClass : MonoBehaviour
     public GameHandler gameHandler;
     public UIHandler uiHandler;
     public GameObject home;
-
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -25,7 +26,6 @@ public class MapMovementClass : MonoBehaviour
             pantry.gameObject.SetActive(true);
         }
 
-        // Ensure player begins at origin
         var positions = currentPantry.transform.position;
         transform.position = new Vector2(positions.x, positions.y);
 
@@ -36,6 +36,60 @@ public class MapMovementClass : MonoBehaviour
     // Update is called once per frame
     void Update()
     {    
+        if (Input.GetMouseButtonDown(0))
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
+            if (hit.collider != null)
+            {
+                PantryClass pantry = hit.collider.GetComponent<PantryClass>();
+
+                if (pantry != null)
+                {
+                    if (pantry.tag == "Job")
+                    {
+                        uiHandler.UpdateInfoPanel("Type: Job\n" + 
+                                                  "Time: " + pantry.time + " min\n" + 
+                                                  "Worked: " + !pantry.interactable + "\n" + 
+                                                  "Pay: " + pantry.money);
+                    }
+                    else if (pantry.tag == "Pantry" || pantry.tag == "LargePantry")
+                    {
+                        string message = "";
+                        if (pantry.tag == "Pantry")
+                        {
+                            message = "Type: Outside Pantry\n" + "Collected: " + !pantry.interactable + "\n";
+                        }
+                        if (pantry.tag == "LargePantry")
+                        {
+                            message = "Type: Large Pantry\n" + "Collected: " + !pantry.interactable + "\n";
+                        }
+                        if (pantry.food[0] != 0)
+                        {
+                           message += "Protein x" + pantry.food[0] + "\n";
+                        }
+                        if (pantry.food[1] != 0)
+                        {
+                           message += "Vegetable x" + pantry.food[1] + "\n";
+                        }
+                        if (pantry.food[2] != 0)
+                        {
+                           message += "Carbs x" + pantry.food[2] + "\n";
+                        }
+                        if (pantry.food[3] != 0)
+                        {
+                           message += "Fruits x" + pantry.food[3] + "\n";
+                        }
+                        if (pantry.food[4] != 0)
+                        {
+                           message += "Dairy x" + pantry.food[4] + "\n";
+                        }
+                        uiHandler.UpdateInfoPanel(message);
+                    }
+                }
+            }
+        }
+
         if (UnityEngine.InputSystem.Keyboard.current.wKey.wasPressedThisFrame)
         {
             PantryClass lastPantry = currentPantry;
@@ -69,62 +123,52 @@ public class MapMovementClass : MonoBehaviour
             //activateNodes(currentPantry);
             
         }
-    } // Update()
+    } 
 
-    void takeFood(PantryClass currentPantry)
-    {
-        if (!currentPantry.Jobable) return;
-        for (int i = 0; i < currentPantry.food.Length; i++)
-        {
-            LoopHandler.foodGathered[i] += currentPantry.food[i];
-            currentPantry.food[i] = 0;
-        }
-        
-    }
-
-    public void interact(PantryClass currentPantry)
+    public void determineNode(PantryClass currentPantry)
     {
         activateNodes(currentPantry);
-        if (currentPantry.tag == "Job" && currentPantry.Jobable)
+        if (currentPantry.tag == "Job" && currentPantry.interactable)
         {
+            uiHandler.interactButton.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "Work";
             uiHandler.interactButton.SetActive(true);
-            currentPantry.Jobable = false;
-            int addedTime = UnityEngine.Random.Range(1, 3);
-            int moneyChance = UnityEngine.Random.Range(1, 100);
-            int workMoney;
-            if (moneyChance < 50)
-            {
-                workMoney = 25;
-            }
-            else if (moneyChance < 83)
-            {
-                workMoney = 50;
-            }
-            else
-            {
-                workMoney = 75;
-            }
-
-            gameHandler.money += workMoney;
-
-            uiHandler.UpdateInfoPanel(addedTime, "Money Available: $" + workMoney);
-
-            //TODO: OVERLAY WORK SCRIPT
-            LoopHandler.time += addedTime;
-            uiHandler.UpdateMoney(gameHandler.money);
-            uiHandler.UpdateGameLog("Worked for $" + workMoney + "!");
+            currentPantry.interactable = false;
+            // uiHandler.UpdateInfoPanel(addedTime, "Money Available: $" + workMoney);
         }
         else if (currentPantry.tag == "Pantry" || currentPantry.tag == "LargePantry")
-        {
+        {            
+            uiHandler.interactButton.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "Collect";
             uiHandler.interactButton.SetActive(true);
-            takeFood(currentPantry);
-            LoopHandler.Collected();
             uiHandler.UpdateGameLog("Visited Pantry!");
         }
         else
         {
             uiHandler.interactButton.SetActive(false);
         }
+    }
+
+    public void interact()
+    {
+        Debug.Log("Run");
+        if (currentPantry.tag == "Job")
+        {
+            LoopHandler.time += currentPantry.time;
+            gameHandler.money += currentPantry.money;
+            uiHandler.UpdateMoney(gameHandler.money);
+            uiHandler.UpdateGameLog("Worked for $" + currentPantry.money + "!");
+        }
+        if (currentPantry.tag == "Pantry" || currentPantry.tag == "LargePantry")
+        {
+            for (int i = 0; i < currentPantry.food.Length; i++)
+            {
+                LoopHandler.foodGathered[i] += currentPantry.food[i];
+                currentPantry.food[i] = 0;
+            }    
+            uiHandler.UpdateGameLog("Collected food!");
+            LoopHandler.Collected();
+        }
+        currentPantry.interactable = false;
+        uiHandler.interactButton.SetActive(false);
     }
 
     void deactivateNodes(PantryClass pantry)
@@ -134,6 +178,7 @@ public class MapMovementClass : MonoBehaviour
             p.gameObject.SetActive(false);
         }
     }
+    
     void activateNodes(PantryClass pantry)
     {
         foreach (PantryClass p in pantry.closestNodes)
@@ -159,7 +204,7 @@ public class MapMovementClass : MonoBehaviour
                                         + Math.Pow(transform.position.y-positions.y, 2));
         float TravelTime = (distance * 100) % 10;
         currentPantry = nextPantry;
-        interact(currentPantry);
+        determineNode(currentPantry);
                 
         // move the player character to the new node
         playerDistanceTraveled += TravelTime;
@@ -185,7 +230,7 @@ public class MapMovementClass : MonoBehaviour
                                         + Math.Pow(transform.position.y-positions.y, 2));
         float TravelTime = (distance * 100) % 10;
         currentPantry = nextPantry;
-        interact(currentPantry);
+        determineNode(currentPantry);
 
         // move the player character to the new node
         playerDistanceTraveled += TravelTime;
@@ -211,9 +256,8 @@ public class MapMovementClass : MonoBehaviour
                                         + Math.Pow(transform.position.y-positions.y, 2));
         float TravelTime = (distance * 100) % 10;
         currentPantry = nextPantry;
-        interact(currentPantry);
+        determineNode(currentPantry);
                     
-
         // move the player character to the new node
         playerDistanceTraveled += TravelTime;
         LoopHandler.time += TravelTime;
@@ -238,8 +282,7 @@ public class MapMovementClass : MonoBehaviour
                                         + Math.Pow(transform.position.y-positions.y, 2));
         float TravelTime = (distance * 100) % 10;
         currentPantry = nextPantry;
-        interact(currentPantry);
-                    
+        determineNode(currentPantry);     
 
         // move the player character to the new node
         playerDistanceTraveled += TravelTime;

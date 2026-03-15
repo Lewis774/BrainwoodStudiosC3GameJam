@@ -46,8 +46,6 @@ public class UIHandler : MonoBehaviour
 
     public TextMeshProUGUI weeklyUpdateText;
 
-    public TextMeshProUGUI infoTimeText;
-
     public TextMeshProUGUI infoUpdateText;
 
     public GameObject interactButton;
@@ -67,7 +65,6 @@ public class UIHandler : MonoBehaviour
         gameLogPanel2.text = "";
         gameLogPanel3.text = "";
         weeklyUpdateText.text = "";
-        infoTimeText.text = "";
         infoUpdateText.text = "";
 
         interactButton.SetActive(false);
@@ -150,10 +147,9 @@ public class UIHandler : MonoBehaviour
         weeklyUpdateText.text = message;
     }
 
-    public void UpdateInfoPanel(int time, string message)
+    public void UpdateInfoPanel(string message)
     {
-        infoTimeText.text = "Time: " + time + "min";
-        infoTimeText.text = "Time: " + time + "min";
+        infoUpdateText.text = message;
     }    
 
 }

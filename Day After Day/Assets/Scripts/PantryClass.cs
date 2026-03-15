@@ -27,7 +27,6 @@ public class PantryClass : MonoBehaviour
         }
         food = new int[5];
         
-        // Not a node and therefore a pantry
         if (tag == "Pantry")
         {
             for (int i = 0; i < food.Length; i++)

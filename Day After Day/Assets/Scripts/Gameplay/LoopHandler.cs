@@ -106,6 +106,10 @@ public class LoopHandler : MonoBehaviour
     {
         if (!loopOver)
         {
+        if (UnityEngine.InputSystem.Keyboard.current.bKey.wasPressedThisFrame)
+        {
+            time = 1e6f;         
+        }
             time += Time.deltaTime * 6;
             uiHandler.UpdateTime((int) time);
         }   

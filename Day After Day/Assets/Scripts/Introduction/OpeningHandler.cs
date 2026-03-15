@@ -59,7 +59,7 @@ public class OpeningHandler : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 
-    IEnumerator FadeTo(Image image, float targetAlpha, float duration)
+    public IEnumerator FadeTo(Image image, float targetAlpha, float duration)
     {
         float startAlpha = image.color.a;
         float elapsed = 0f;

@@ -49,9 +49,11 @@ public class LoopHandler : MonoBehaviour
     int weeklyCost;
 
     public bool loopOver = false;
+    public MapMovementClass player;
 
     public void Start()
     {
+        player = GameObject.Find("Player").GetComponent<MapMovementClass>();
         sceneShaderImage = sceneShader.GetComponent<Image>();
         SetAlpha(sceneShaderImage, 1f);
         uiHandler = UI.GetComponent<UIHandler>();    
@@ -59,6 +61,9 @@ public class LoopHandler : MonoBehaviour
 
     public IEnumerator StartLoop(int w, int m)
     {
+        player.canMove = true;
+        player.gameObject.transform.position = new Vector2(player.home.transform.position.x,
+                                                           player.home.transform.position.y);
         week = w;
         uiHandler.UpdateMoney(m);
         uiHandler.UpdateWeek(w);
@@ -117,6 +122,8 @@ public class LoopHandler : MonoBehaviour
 
     public void LoopEnd()
     {
+        player.currentPantry = player.home.GetComponent<PantryClass>();
+        player.canMove = false;
         weeklyCost = 0;
         loopOver = true;
         StartCoroutine(ShowResults());

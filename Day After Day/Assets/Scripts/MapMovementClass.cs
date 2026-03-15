@@ -10,6 +10,8 @@ public class MapMovementClass : MonoBehaviour
     public LoopHandler LoopHandler;
     public GameHandler gameHandler;
     public UIHandler uiHandler;
+    public GameObject home;
+    public bool canMove;
 
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -31,6 +33,8 @@ public class MapMovementClass : MonoBehaviour
 
         playerDistanceTraveled = 0;
 
+        canMove = false;
+
     }
 
     // Update is called once per frame
@@ -39,7 +43,7 @@ public class MapMovementClass : MonoBehaviour
         if (UnityEngine.InputSystem.Keyboard.current.wKey.wasPressedThisFrame)
         {
             PantryClass lastPantry = currentPantry;
-            moveNorth();
+            if (!LoopHandler.loopOver) moveNorth();
             //deactivateNodes(lastPantry);
             //activateNodes(currentPantry);
             
@@ -48,7 +52,7 @@ public class MapMovementClass : MonoBehaviour
         if (UnityEngine.InputSystem.Keyboard.current.aKey.wasPressedThisFrame)
         {
             PantryClass lastPantry = currentPantry;
-            moveWest();
+            if (!LoopHandler.loopOver) moveWest();
             //deactivateNodes(lastPantry);
             //activateNodes(currentPantry);
             
@@ -56,7 +60,7 @@ public class MapMovementClass : MonoBehaviour
         if (UnityEngine.InputSystem.Keyboard.current.sKey.wasPressedThisFrame)
         {
             PantryClass lastPantry = currentPantry;
-            moveSouth();
+            if (!LoopHandler.loopOver) moveSouth();
             //deactivateNodes(lastPantry);
             //activateNodes(currentPantry);
             
@@ -64,7 +68,7 @@ public class MapMovementClass : MonoBehaviour
         if (UnityEngine.InputSystem.Keyboard.current.dKey.wasPressedThisFrame)
         {
             PantryClass lastPantry = currentPantry;
-            moveEast();
+            if (!LoopHandler.loopOver) moveEast();
             //deactivateNodes(lastPantry);
             //activateNodes(currentPantry);
             

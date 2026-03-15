@@ -1,6 +1,6 @@
 using UnityEngine;
 using System;
-using System.Linq;
+using Unity.VisualScripting;
 
 public class MapMovementClass : MonoBehaviour
 {
@@ -13,7 +13,6 @@ public class MapMovementClass : MonoBehaviour
     public GameObject home;
     public bool canMove;
 
-    
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -93,27 +92,32 @@ public class MapMovementClass : MonoBehaviour
             currentPantry.Jobable = false;
             int addedTime = UnityEngine.Random.Range(1, 3);
             int moneyChance = UnityEngine.Random.Range(1, 100);
+            int workMoney;
             if (moneyChance < 50)
             {
-                gameHandler.money += 25;
+                workMoney = 25;
             }
             else if (moneyChance < 83)
             {
-                gameHandler.money += 50;
+                workMoney = 50;
             }
             else
             {
-                gameHandler.money += 75;
+                workMoney = 75;
             }
+
+            gameHandler.money += workMoney;
 
             //TODO: OVERLAY WORK SCRIPT
             LoopHandler.time += addedTime;
             uiHandler.UpdateMoney(gameHandler.money);
+            uiHandler.UpdateGameLog("Worked for $" + workMoney + "!");
         }
         if (currentPantry.tag == "Pantry" || currentPantry.tag == "LargePantry")
         {
             takeFood(currentPantry);
             LoopHandler.Collected();
+            uiHandler.UpdateGameLog("Visited Pantry!");
         }
     }
 
@@ -134,27 +138,27 @@ public class MapMovementClass : MonoBehaviour
     void moveNorth()
     {
         PantryClass nextPantry = null;
-            double maxY = -1e6;
-            foreach (PantryClass pantry in currentPantry.closestNodes)
+        double maxY = -1e6;
+        foreach (PantryClass pantry in currentPantry.closestNodes)
+        {
+            if (pantry.gameObject.transform.position.y > maxY)
             {
-                if (pantry.gameObject.transform.position.y > maxY)
-                {
-                    maxY = pantry.gameObject.transform.position.y;
-                    nextPantry = pantry;
-                }
+                maxY = pantry.gameObject.transform.position.y;
+                nextPantry = pantry;
             }
-            var positions = nextPantry.transform.position;
-            float distance = (float) Math.Sqrt(Math.Pow(transform.position.x-positions.x, 2)
-                                            + Math.Pow(transform.position.y-positions.y, 2));
-            float TravelTime = (distance * 100) % 10;
-            currentPantry = nextPantry;
-            interact(currentPantry);
-                    
-
-            // move the player character to the new node
-            playerDistanceTraveled += TravelTime;
-            LoopHandler.time += TravelTime;
-            transform.position = new Vector2(positions.x, positions.y);
+        }
+        var positions = nextPantry.transform.position;
+        float distance = (float) Math.Sqrt(Math.Pow(transform.position.x-positions.x, 2)
+                                        + Math.Pow(transform.position.y-positions.y, 2));
+        float TravelTime = (distance * 100) % 10;
+        currentPantry = nextPantry;
+        interact(currentPantry);
+                
+        // move the player character to the new node
+        playerDistanceTraveled += TravelTime;
+        LoopHandler.time += TravelTime;
+        transform.position = new Vector2(positions.x, positions.y);
+        uiHandler.UpdateGameLog("Moved for " + (int) TravelTime + " min ");
     }
     void moveSouth()
     {
@@ -180,6 +184,7 @@ public class MapMovementClass : MonoBehaviour
         playerDistanceTraveled += TravelTime;
         LoopHandler.time += TravelTime;
         transform.position = new Vector2(positions.x, positions.y);
+        uiHandler.UpdateGameLog("Moved for " + (int) TravelTime + " min ");        
     }
     void moveEast()
     {
@@ -205,6 +210,7 @@ public class MapMovementClass : MonoBehaviour
         playerDistanceTraveled += TravelTime;
         LoopHandler.time += TravelTime;
         transform.position = new Vector2(positions.x, positions.y);
+        uiHandler.UpdateGameLog("Moved for " + (int) TravelTime + " min ");
     }
     void moveWest()
     {
@@ -230,6 +236,7 @@ public class MapMovementClass : MonoBehaviour
         playerDistanceTraveled += TravelTime;
         LoopHandler.time += TravelTime;
         transform.position = new Vector2(positions.x, positions.y);
+        uiHandler.UpdateGameLog("Moved for " + (int) TravelTime + " min ");
     }
 
     

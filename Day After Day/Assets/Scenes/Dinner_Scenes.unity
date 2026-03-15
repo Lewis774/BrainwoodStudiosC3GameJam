@@ -705,9 +705,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Dialogue
   textComponent: {fileID: 1011044915}
   lines: []
-  textSpeed: -0.44
+  textSpeed: -2.03
   transitions: {fileID: 370433084}
-  nextSceneName: Dinner
+  nextSceneName: Dinner_Testing
   fadeDuration: 1
   dialogueFirstTime:
   - "Dear, you may notice that we\u2019ll be eating different things for a while.

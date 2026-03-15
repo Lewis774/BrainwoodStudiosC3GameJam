@@ -544,7 +544,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1418062934}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f7cb3882abf64ba41a0b368b845b788e, type: 3}
+  m_Script: {fileID: 11500000, guid: 9ccf0019db40ef346ae83f78c129678b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Testing
 --- !u!114 &1418062937
@@ -592,7 +592,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1418062936}
-        m_TargetAssemblyTypeName: Testing, Assembly-CSharp
+        m_TargetAssemblyTypeName: Transition_Use, Assembly-CSharp
         m_MethodName: MoveToScene
         m_Mode: 3
         m_Arguments:

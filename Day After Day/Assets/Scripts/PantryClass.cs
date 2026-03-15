@@ -7,12 +7,20 @@ public class PantryClass : MonoBehaviour
     public int[] food;
     public PantryClass[] closestNodes;
     public bool Jobable;
+
+    public LoopHandler loopHandler;
+    public UIHandler uiHandler;
+    public GameHandler gameHandler;
     
     
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        loopHandler = GameObject.Find("Game").GetComponent<LoopHandler>();
+        uiHandler = GameObject.Find("UI").GetComponent<UIHandler>();
+        gameHandler = GameObject.Find("Game").GetComponent<GameHandler>();
+
         var allNodes = FindObjectsByType<PantryClass>(FindObjectsSortMode.None);
 
         closestNodes = new PantryClass[5];
@@ -30,6 +38,7 @@ public class PantryClass : MonoBehaviour
                 food[i] = UnityEngine.Random.Range(0, 2) * (i + 1);
             }
         }
+        
 
         Jobable = true;
         

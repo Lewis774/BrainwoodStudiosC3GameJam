@@ -3,7 +3,6 @@ using UnityEngine.UI;
 using System.Collections;
 using TMPro;
 using System;
-using NUnit.Framework.Interfaces;
 
 public class LoopHandler : MonoBehaviour
 {
@@ -49,11 +48,12 @@ public class LoopHandler : MonoBehaviour
 
     int weeklyCost;
 
-    public bool loopOver = false;
+    public bool loopOver;
     public MapMovementClass player;
 
     public void Start()
     {
+        loopOver = true;
         player = GameObject.Find("Player").GetComponent<MapMovementClass>();
         sceneShaderImage = sceneShader.GetComponent<Image>();
         SetAlpha(sceneShaderImage, 1f);
@@ -107,10 +107,10 @@ public class LoopHandler : MonoBehaviour
     {
         if (!loopOver)
         {
-        if (UnityEngine.InputSystem.Keyboard.current.bKey.wasPressedThisFrame)
-        {
-            time = 1e6f;         
-        }
+            if (UnityEngine.InputSystem.Keyboard.current.bKey.wasPressedThisFrame)
+            {
+                time = 1e6f;
+            }
             time += Time.deltaTime * 6;
             uiHandler.UpdateTime((int) time);
         }   
@@ -129,7 +129,6 @@ public class LoopHandler : MonoBehaviour
         player.currentPantry = player.home.GetComponent<PantryClass>();
         weeklyCost = 0;
         loopOver = true;
-        uiHandler.interactButton.SetActive(false);
         StartCoroutine(ShowResults());
     }
 

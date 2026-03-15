@@ -20,8 +20,23 @@ public class GameHandler : MonoBehaviour
     {
         score = 0;
         loopHandler = GetComponent<LoopHandler>();
-        StartCoroutine(RunGameLoops());
+        //StartCoroutine(RunGameLoops());
         uiHandler = GameObject.Find("UI").GetComponent<UIHandler>();
+        
+    }
+    void modThree()
+    {
+        GameObject[] pantries = GameObject.FindGameObjectsWithTag("Pantry");
+        foreach (GameObject pantry in pantries)
+        {
+            int[] food = pantry.GetComponent<PantryClass>().food;
+            for (int i = 0; i < food.Length; i++)
+            {
+                food[i] -= UnityEngine.Random.Range(0, 2);
+                if (food[i] < 0) food[i] = 0;
+            }
+        }
+
     }
 
     IEnumerator RunGameLoops()
@@ -40,16 +55,7 @@ public class GameHandler : MonoBehaviour
                 //TODO: PANTRIES FOOD *.8
                 //TODO: TELL PLAYER WEATHER HURT FOOD QUALITY
                 uiHandler.UpdateWeeklyInfo("Poor Weather. Pantries now have less food.");
-                GameObject[] pantries = GameObject.FindGameObjectsWithTag("Pantry");
-                foreach (GameObject pantry in pantries)
-                {
-                    int[] food = pantry.GetComponent<PantryClass>().food;
-                    for (int i = 0; i < food.Length; i++)
-                    {
-                        food[i]--;
-                        if (food[i] < 0) food[i] = 0;
-                    }
-                }
+                modThree();
 
             }
             if (currentLoop == 5)
@@ -58,6 +64,7 @@ public class GameHandler : MonoBehaviour
                 PantryClass closedPantry = GameObject.Find("Large Pantry").GetComponent<PantryClass>();
                 closedPantry.interactable = false;
                 closedPantry.gameObject.GetComponent<SpriteRenderer>().color = Color.red;
+                modThree();
             }
             next = false;
             StartCoroutine(loopHandler.StartLoop(currentLoop, money));
@@ -76,6 +83,13 @@ public class GameHandler : MonoBehaviour
     public void OnSwitchSceneButton()
     {
         StartCoroutine(SwitchScene());
+    }
+
+    public void CloseTutorial()
+    {
+        GameObject.Find("Tutorial").SetActive(false);
+        loopHandler.loopOver = false;
+        StartCoroutine(RunGameLoops());
     }
 
     public IEnumerator SwitchScene()

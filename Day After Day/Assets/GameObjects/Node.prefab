@@ -48,7 +48,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PantryClass
   food: 
   closestNodes: []
-  Jobable: 0
+  interactable: 0
+  loopHandler: {fileID: 0}
+  uiHandler: {fileID: 0}
+  gameHandler: {fileID: 0}
+  time: 0
+  money: 0
 --- !u!61 &3902754790113366001
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -93,7 +98,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 2, y: 2}
   m_EdgeRadius: 0
 --- !u!212 &9175895063566150153
 SpriteRenderer:

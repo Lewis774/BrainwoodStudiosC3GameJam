@@ -76,7 +76,7 @@ public class LoopHandler : MonoBehaviour
             text.text = "";
             text.gameObject.SetActive(false);
         }
-        
+
         weeklyCostHeader.SetActive(false);
         weeklyCostText.text = "";
         weeklyCostText.gameObject.SetActive(false);
@@ -92,7 +92,7 @@ public class LoopHandler : MonoBehaviour
 
     IEnumerator WaitForNoon()
     {
-        yield return new WaitUntil(() => time >= 510);
+        yield return new WaitUntil(() => time >= 1200);
         loopOver = true;
         LoopEnd();
     }

@@ -75,7 +75,6 @@ public class MapMovementClass : MonoBehaviour
     {
         for (int i = 0; i < currentPantry.food.Length; i++)
         {
-            Debug.Log(currentPantry.food[i]);
             LoopHandler.foodGathered[i] += currentPantry.food[i];
             currentPantry.food[i] = 0;
         }

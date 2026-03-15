@@ -50,6 +50,8 @@ public class UIHandler : MonoBehaviour
 
     public TextMeshProUGUI infoUpdateText;
 
+    public GameObject interactButton;
+
     int lastLoggedQuarter = -1;
 
     void Start()
@@ -67,6 +69,8 @@ public class UIHandler : MonoBehaviour
         weeklyUpdateText.text = "";
         infoTimeText.text = "";
         infoUpdateText.text = "";
+
+        interactButton.SetActive(false);
 
         bars = new GameObject[5] {proteinBar, vegetableBar, carbsBar, fruitBar, dairyBar};
         colors = new Color[5] {proteinRed, vegetableGreen, yellowGrain, pinkFruit, dairyBlue};

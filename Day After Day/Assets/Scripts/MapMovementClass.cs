@@ -107,7 +107,7 @@ public class MapMovementClass : MonoBehaviour
             LoopHandler.time += addedTime;
             uiHandler.UpdateMoney(gameHandler.money);
         }
-        if (currentPantry.tag == "Pantry")
+        if (currentPantry.tag == "Pantry" || currentPantry.tag == "LargePantry")
         {
             takeFood(currentPantry);
             LoopHandler.Collected();

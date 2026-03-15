@@ -23,19 +23,31 @@ public class PantryClass : MonoBehaviour
 
         var allNodes = FindObjectsByType<PantryClass>(FindObjectsSortMode.None);
 
-        closestNodes = new PantryClass[5];
+        closestNodes = new PantryClass[4];
         for (int i = 0; i < closestNodes.Length; i++)
         {
             closestNodes[i] = getClosestNode(allNodes);
         }
-        food = new int[4];
+        food = new int[5];
         
         // Not a node and therefore a pantry
         if (tag == "Pantry")
         {
             for (int i = 0; i < food.Length; i++)
             {
-                food[i] = UnityEngine.Random.Range(0, 2) * (i + 1);
+                food[i] = UnityEngine.Random.Range(0, 3);
+                if (i == 1 || i == 3 || i == 4)
+                {
+                    food[i] /= UnityEngine.Random.Range(1, 3);
+                }
+
+            }
+        }
+        if (tag == "LargePantry")
+        {
+            for (int i = 0; i < food.Length; i++)
+            {
+                food[i] = UnityEngine.Random.Range(0, 5);
             }
         }
         

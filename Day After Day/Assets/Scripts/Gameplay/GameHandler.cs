@@ -32,7 +32,7 @@ public class GameHandler : MonoBehaviour
             {
                 uiHandler.UpdateWeeklyInfo("A Pantry has been Vandalized! Pantries marked with red are no longer accessable."); 
                 PantryClass closedPantry = GameObject.Find("Pantry (1)").GetComponent<PantryClass>();
-                closedPantry.Jobable = false;
+                closedPantry.interactable = false;
                 closedPantry.gameObject.GetComponent<SpriteRenderer>().color = Color.red;
             }
             if (currentLoop == 3)
@@ -56,7 +56,7 @@ public class GameHandler : MonoBehaviour
             {
                 uiHandler.UpdateWeeklyInfo("Due to neglect, one of the large pantries has closed.");
                 PantryClass closedPantry = GameObject.Find("Large Pantry").GetComponent<PantryClass>();
-                closedPantry.Jobable = false;
+                closedPantry.interactable = false;
                 closedPantry.gameObject.GetComponent<SpriteRenderer>().color = Color.red;
             }
             next = false;

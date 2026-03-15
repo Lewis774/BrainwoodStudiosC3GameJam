@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using System.Collections;
 using TMPro;
 using System;
+using NUnit.Framework.Interfaces;
 
 public class LoopHandler : MonoBehaviour
 {
@@ -128,6 +129,7 @@ public class LoopHandler : MonoBehaviour
         player.currentPantry = player.home.GetComponent<PantryClass>();
         weeklyCost = 0;
         loopOver = true;
+        uiHandler.interactButton.SetActive(false);
         StartCoroutine(ShowResults());
     }
 

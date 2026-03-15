@@ -30,6 +30,11 @@ public class PantryClass : MonoBehaviour
                 food[i] = UnityEngine.Random.Range(0, 2) * (i + 1);
             }
         }
+        if (tag == "Job")
+        {
+            //TODO: OVERLAY WORK SCRIPT
+            
+        }
 
         Jobable = true;
         

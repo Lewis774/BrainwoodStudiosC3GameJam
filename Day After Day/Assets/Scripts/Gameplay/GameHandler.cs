@@ -6,6 +6,7 @@ using System.IO;
 public class GameHandler : MonoBehaviour
 {
     public LoopHandler loopHandler;
+    public UIHandler uiHandler;
 
     public int score;
     public int money = 2000;
@@ -20,6 +21,7 @@ public class GameHandler : MonoBehaviour
         score = 0;
         loopHandler = GetComponent<LoopHandler>();
         StartCoroutine(RunGameLoops());
+        uiHandler = GameObject.Find("UI").GetComponent<UIHandler>();
     }
 
     IEnumerator RunGameLoops()
@@ -28,7 +30,7 @@ public class GameHandler : MonoBehaviour
         {
             if (currentLoop == 1)
             {
-                //TDODO: TELL THE USER THAT THE CLOSEST PANTRY IS VANDALIZED
+                uiHandler.UpdateWeeklyInfo("A Pantry has been Vandalized! Pantries marked with red are no longer accessable."); 
                 PantryClass closedPantry = GameObject.Find("Pantry (1)").GetComponent<PantryClass>();
                 closedPantry.Jobable = false;
                 closedPantry.gameObject.GetComponent<SpriteRenderer>().color = Color.red;
@@ -37,6 +39,7 @@ public class GameHandler : MonoBehaviour
             {
                 //TODO: PANTRIES FOOD *.8
                 //TODO: TELL PLAYER WEATHER HURT FOOD QUALITY
+                uiHandler.UpdateWeeklyInfo("Poor Weather. Pantries now have less food.");
                 GameObject[] pantries = GameObject.FindGameObjectsWithTag("Pantry");
                 foreach (GameObject pantry in pantries)
                 {
@@ -51,7 +54,10 @@ public class GameHandler : MonoBehaviour
             }
             if (currentLoop == 5)
             {
-                //TODO: CLOSE LARGE PANTRY
+                uiHandler.UpdateWeeklyInfo("Due to neglect, one of the large pantries has closed.");
+                PantryClass closedPantry = GameObject.Find("Large Pantry").GetComponent<PantryClass>();
+                closedPantry.Jobable = false;
+                closedPantry.gameObject.GetComponent<SpriteRenderer>().color = Color.red;
             }
             next = false;
             StartCoroutine(loopHandler.StartLoop(currentLoop, money));

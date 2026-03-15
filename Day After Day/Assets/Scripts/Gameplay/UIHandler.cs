@@ -38,6 +38,20 @@ public class UIHandler : MonoBehaviour
 
     public Color[] colors;
 
+    public TextMeshProUGUI gameLogPanel1;
+
+    public TextMeshProUGUI gameLogPanel2;
+    
+    public TextMeshProUGUI gameLogPanel3;
+
+    public TextMeshProUGUI weeklyUpdateText;
+
+    public TextMeshProUGUI infoUpdateText;
+
+    public GameObject interactButton;
+
+    int lastLoggedQuarter = -1;
+
     void Start()
     {
         defaultGray = new Color(204f/255f, 204f/255f, 204f/255f, 1f);
@@ -47,13 +61,21 @@ public class UIHandler : MonoBehaviour
         pinkFruit = new Color(255f/255f, 179f/255f, 186f/255f, 1f);
         dairyBlue = new Color(119f/255f, 201f/255f, 255f/255f, 1f);
 
+        gameLogPanel1.text = "";
+        gameLogPanel2.text = "";
+        gameLogPanel3.text = "";
+        weeklyUpdateText.text = "";
+        infoUpdateText.text = "";
+
+        interactButton.SetActive(false);
+
         bars = new GameObject[5] {proteinBar, vegetableBar, carbsBar, fruitBar, dairyBar};
         colors = new Color[5] {proteinRed, vegetableGreen, yellowGrain, pinkFruit, dairyBlue};
 
         ResetBars();
     }
 
-    void ResetBars()
+    public void ResetBars()
     {
         UpdateBar(proteinBar, 7, defaultGray);
         UpdateBar(vegetableBar, 7, defaultGray);
@@ -83,7 +105,7 @@ public class UIHandler : MonoBehaviour
         int hours = timeInMinutes / 60;
         int minutes = timeInMinutes % 60;
 
-        minutes = (minutes / 15) * 15;
+        int quarter = minutes / 15;
 
         string period = hours >= 12 ? "PM" : "AM";
 
@@ -91,7 +113,16 @@ public class UIHandler : MonoBehaviour
         if (displayHour == 0)
             displayHour = 12;
 
-        timeText.text = $"{displayHour}:{minutes:00} {period}";
+        int displayMinutes = quarter * 15;
+
+        timeText.text = $"{displayHour}:{displayMinutes:00} {period}";
+
+        if (quarter != lastLoggedQuarter)
+        {
+            lastLoggedQuarter = quarter;
+
+            UpdateGameLog("Time is now " + $"{displayHour}:{displayMinutes:00} {period}");
+        }
     }
 
     public void UpdateMoney(int money) 
@@ -103,6 +134,23 @@ public class UIHandler : MonoBehaviour
     {
         weekText.text = "Week " + week;
     }
+
+    public void UpdateGameLog(string message)
+    {
+        gameLogPanel3.text = gameLogPanel2.text;
+        gameLogPanel2.text = gameLogPanel1.text;
+        gameLogPanel1.text = message;
+    }
+
+    public void UpdateWeeklyInfo(string message)
+    {
+        weeklyUpdateText.text = message;
+    }
+
+    public void UpdateInfoPanel(string message)
+    {
+        infoUpdateText.text = message;
+    }    
 
 }
 

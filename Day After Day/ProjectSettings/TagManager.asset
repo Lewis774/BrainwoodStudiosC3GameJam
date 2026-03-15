@@ -4,6 +4,9 @@
 TagManager:
   serializedVersion: 3
   tags:
+  - Node
+  - Pantry
+  - Job
   - LargePantry
   layers:
   - Default

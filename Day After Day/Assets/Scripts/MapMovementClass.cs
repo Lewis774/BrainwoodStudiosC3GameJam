@@ -1,17 +1,18 @@
 using UnityEngine;
 using System;
-using System.Linq;
+using Unity.VisualScripting;
+using TMPro;
+using UnityEditorInternal;
 
 public class MapMovementClass : MonoBehaviour
 {
     public double playerDistanceTraveled;
     public PantryClass currentPantry;
-    public int savings;
     public LoopHandler LoopHandler;
     public GameHandler gameHandler;
     public UIHandler uiHandler;
+    public GameObject home;
 
-    
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -25,7 +26,6 @@ public class MapMovementClass : MonoBehaviour
             pantry.gameObject.SetActive(true);
         }
 
-        // Ensure player begins at origin
         var positions = currentPantry.transform.position;
         transform.position = new Vector2(positions.x, positions.y);
 
@@ -36,82 +36,142 @@ public class MapMovementClass : MonoBehaviour
     // Update is called once per frame
     void Update()
     {    
-        if (UnityEngine.InputSystem.Keyboard.current.wKey.wasPressedThisFrame)
+        if (Input.GetMouseButtonDown(0))
         {
-            PantryClass lastPantry = currentPantry;
-            moveNorth();
-            //deactivateNodes(lastPantry);
-            //activateNodes(currentPantry);
-            
-            
-        }
-        if (UnityEngine.InputSystem.Keyboard.current.aKey.wasPressedThisFrame)
-        {
-            PantryClass lastPantry = currentPantry;
-            moveWest();
-            //deactivateNodes(lastPantry);
-            //activateNodes(currentPantry);
-            
-        }
-        if (UnityEngine.InputSystem.Keyboard.current.sKey.wasPressedThisFrame)
-        {
-            PantryClass lastPantry = currentPantry;
-            moveSouth();
-            //deactivateNodes(lastPantry);
-            //activateNodes(currentPantry);
-            
-        }
-        if (UnityEngine.InputSystem.Keyboard.current.dKey.wasPressedThisFrame)
-        {
-            PantryClass lastPantry = currentPantry;
-            moveEast();
-            //deactivateNodes(lastPantry);
-            //activateNodes(currentPantry);
-            
-        }
-    } // Update()
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
+            if (hit.collider != null)
+            {
+                PantryClass pantry = hit.collider.GetComponent<PantryClass>();
 
-    void takeFood(PantryClass currentPantry)
-    {
-        for (int i = 0; i < currentPantry.food.Length; i++)
-        {
-            Debug.Log(currentPantry.food[i]);
-            LoopHandler.foodGathered[i] += currentPantry.food[i];
-            currentPantry.food[i] = 0;
+                if (pantry != null)
+                {
+                    if (pantry.tag == "Job")
+                    {
+                        uiHandler.UpdateInfoPanel("Type: Job\n" + 
+                                                  "Time: " + pantry.time + " min\n" + 
+                                                  "Worked: " + !pantry.interactable + "\n" + 
+                                                  "Pay: " + pantry.money);
+                    }
+                    else if (pantry.tag == "Pantry" || pantry.tag == "LargePantry")
+                    {
+                        string message = "";
+                        if (pantry.tag == "Pantry")
+                        {
+                            message = "Type: Outside Pantry\n" + "Collected: " + !pantry.interactable + "\n";
+                        }
+                        if (pantry.tag == "LargePantry")
+                        {
+                            message = "Type: Large Pantry\n" + "Collected: " + !pantry.interactable + "\n";
+                        }
+                        if (pantry.food[0] != 0)
+                        {
+                           message += "Protein x" + pantry.food[0] + "\n";
+                        }
+                        if (pantry.food[1] != 0)
+                        {
+                           message += "Vegetable x" + pantry.food[1] + "\n";
+                        }
+                        if (pantry.food[2] != 0)
+                        {
+                           message += "Carbs x" + pantry.food[2] + "\n";
+                        }
+                        if (pantry.food[3] != 0)
+                        {
+                           message += "Fruits x" + pantry.food[3] + "\n";
+                        }
+                        if (pantry.food[4] != 0)
+                        {
+                           message += "Dairy x" + pantry.food[4] + "\n";
+                        }
+                        uiHandler.UpdateInfoPanel(message);
+                    }
+                }
+            }
         }
-        
-    }
 
-    public void interact(PantryClass currentPantry)
+        if (UnityEngine.InputSystem.Keyboard.current.wKey.wasPressedThisFrame ||
+            UnityEngine.InputSystem.Keyboard.current.upArrowKey.wasPressedThisFrame)
+        {
+            PantryClass lastPantry = currentPantry;
+            if (!LoopHandler.loopOver) moveNorth();
+            //deactivateNodes(lastPantry);
+            //activateNodes(currentPantry);
+            
+            
+        }
+        if (UnityEngine.InputSystem.Keyboard.current.aKey.wasPressedThisFrame ||
+            UnityEngine.InputSystem.Keyboard.current.leftArrowKey.wasPressedThisFrame)
+        {
+            PantryClass lastPantry = currentPantry;
+            if (!LoopHandler.loopOver) moveWest();
+            //deactivateNodes(lastPantry);
+            //activateNodes(currentPantry);
+            
+        }
+        if (UnityEngine.InputSystem.Keyboard.current.sKey.wasPressedThisFrame ||
+            UnityEngine.InputSystem.Keyboard.current.downArrowKey.wasPressedThisFrame)
+        {
+            PantryClass lastPantry = currentPantry;
+            if (!LoopHandler.loopOver) moveSouth();
+            //deactivateNodes(lastPantry);
+            //activateNodes(currentPantry);
+            
+        }
+        if (UnityEngine.InputSystem.Keyboard.current.dKey.wasPressedThisFrame ||
+            UnityEngine.InputSystem.Keyboard.current.rightArrowKey.wasPressedThisFrame)
+        {
+            PantryClass lastPantry = currentPantry;
+            if (!LoopHandler.loopOver) moveEast();
+            //deactivateNodes(lastPantry);
+            //activateNodes(currentPantry);
+        }
+    } 
+
+    public void determineNode(PantryClass currentPantry)
     {
         activateNodes(currentPantry);
-        if (currentPantry.tag == "Job" && currentPantry.Jobable)
+        if (currentPantry.tag == "Job" && currentPantry.interactable)
         {
-            currentPantry.Jobable = false;
-            int addedTime = UnityEngine.Random.Range(1, 3);
-            int moneyChance = UnityEngine.Random.Range(1, 100);
-            if (moneyChance < 50)
-            {
-                gameHandler.money += 25;
-            }
-            else if (moneyChance < 83)
-            {
-                gameHandler.money += 50;
-            }
-            else
-            {
-                gameHandler.money += 75;
-            }
+            uiHandler.interactButton.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "Work";
+            uiHandler.interactButton.SetActive(true);
+            currentPantry.interactable = false;
+            // uiHandler.UpdateInfoPanel(addedTime, "Money Available: $" + workMoney);
+        }
+        else if (currentPantry.tag == "Pantry" || currentPantry.tag == "LargePantry")
+        {            
+            uiHandler.interactButton.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "Collect";
+            uiHandler.interactButton.SetActive(true);
+            uiHandler.UpdateGameLog("Visited Pantry!");
+        }
+        else
+        {
+            uiHandler.interactButton.SetActive(false);
+        }
+    }
 
-            //TODO: OVERLAY WORK SCRIPT
-            LoopHandler.time += addedTime;
+    public void interact()
+    {
+        Debug.Log("Run");
+        if (currentPantry.tag == "Job")
+        {
+            LoopHandler.time += currentPantry.time;
+            gameHandler.money += currentPantry.money;
             uiHandler.UpdateMoney(gameHandler.money);
+            uiHandler.UpdateGameLog("Worked for $" + currentPantry.money + "!");
         }
         if (currentPantry.tag == "Pantry" || currentPantry.tag == "LargePantry")
         {
-            takeFood(currentPantry);
+            for (int i = 0; i < currentPantry.food.Length; i++)
+            {
+                LoopHandler.foodGathered[i] += currentPantry.food[i];
+                currentPantry.food[i] = 0;
+            }    
+            uiHandler.UpdateGameLog("Collected food!");
             LoopHandler.Collected();
         }
+        currentPantry.interactable = false;
+        uiHandler.interactButton.SetActive(false);
     }
 
     void deactivateNodes(PantryClass pantry)
@@ -121,6 +181,7 @@ public class MapMovementClass : MonoBehaviour
             p.gameObject.SetActive(false);
         }
     }
+    
     void activateNodes(PantryClass pantry)
     {
         foreach (PantryClass p in pantry.closestNodes)
@@ -128,31 +189,33 @@ public class MapMovementClass : MonoBehaviour
             p.gameObject.SetActive(true);
         }
     }
+    
     void moveNorth()
     {
         PantryClass nextPantry = null;
-            double maxY = -1e6;
-            foreach (PantryClass pantry in currentPantry.closestNodes)
+        double maxY = -1e6;
+        foreach (PantryClass pantry in currentPantry.closestNodes)
+        {
+            if (pantry.gameObject.transform.position.y > maxY)
             {
-                if (pantry.gameObject.transform.position.y > maxY)
-                {
-                    maxY = pantry.gameObject.transform.position.y;
-                    nextPantry = pantry;
-                }
+                maxY = pantry.gameObject.transform.position.y;
+                nextPantry = pantry;
             }
-            var positions = nextPantry.transform.position;
-            float distance = (float) Math.Sqrt(Math.Pow(transform.position.x-positions.x, 2)
-                                            + Math.Pow(transform.position.y-positions.y, 2));
-            float TravelTime = (distance * 100) % 10;
-            currentPantry = nextPantry;
-            interact(currentPantry);
-                    
-
-            // move the player character to the new node
-            playerDistanceTraveled += TravelTime;
-            LoopHandler.time += TravelTime;
-            transform.position = new Vector2(positions.x, positions.y);
+        }
+        var positions = nextPantry.transform.position;
+        float distance = (float) Math.Sqrt(Math.Pow(transform.position.x-positions.x, 2)
+                                        + Math.Pow(transform.position.y-positions.y, 2));
+        float TravelTime = (distance * 100) % 10;
+        currentPantry = nextPantry;
+        determineNode(currentPantry);
+                
+        // move the player character to the new node
+        playerDistanceTraveled += TravelTime;
+        LoopHandler.time += TravelTime;
+        transform.position = new Vector2(positions.x, positions.y);
+        uiHandler.UpdateGameLog("Moved for " + (int) TravelTime + " min ");
     }
+    
     void moveSouth()
     {
         PantryClass nextPantry = null;
@@ -170,14 +233,15 @@ public class MapMovementClass : MonoBehaviour
                                         + Math.Pow(transform.position.y-positions.y, 2));
         float TravelTime = (distance * 100) % 10;
         currentPantry = nextPantry;
-        interact(currentPantry);
-                    
+        determineNode(currentPantry);
 
         // move the player character to the new node
         playerDistanceTraveled += TravelTime;
         LoopHandler.time += TravelTime;
         transform.position = new Vector2(positions.x, positions.y);
+        uiHandler.UpdateGameLog("Moved for " + (int) TravelTime + " min ");        
     }
+    
     void moveEast()
     {
         PantryClass nextPantry = null;
@@ -195,14 +259,15 @@ public class MapMovementClass : MonoBehaviour
                                         + Math.Pow(transform.position.y-positions.y, 2));
         float TravelTime = (distance * 100) % 10;
         currentPantry = nextPantry;
-        interact(currentPantry);
+        determineNode(currentPantry);
                     
-
         // move the player character to the new node
         playerDistanceTraveled += TravelTime;
         LoopHandler.time += TravelTime;
         transform.position = new Vector2(positions.x, positions.y);
+        uiHandler.UpdateGameLog("Moved for " + (int) TravelTime + " min ");
     }
+    
     void moveWest()
     {
         PantryClass nextPantry = null;
@@ -220,14 +285,12 @@ public class MapMovementClass : MonoBehaviour
                                         + Math.Pow(transform.position.y-positions.y, 2));
         float TravelTime = (distance * 100) % 10;
         currentPantry = nextPantry;
-        interact(currentPantry);
-                    
+        determineNode(currentPantry);     
 
         // move the player character to the new node
         playerDistanceTraveled += TravelTime;
         LoopHandler.time += TravelTime;
         transform.position = new Vector2(positions.x, positions.y);
-    }
-
-    
+        uiHandler.UpdateGameLog("Moved for " + (int) TravelTime + " min ");
+    } 
 }

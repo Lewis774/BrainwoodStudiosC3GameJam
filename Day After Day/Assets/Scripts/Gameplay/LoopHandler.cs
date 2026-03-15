@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using System.Collections;
 using TMPro;
 using System;
+using NUnit.Framework.Interfaces;
 
 public class LoopHandler : MonoBehaviour
 {
@@ -49,9 +50,11 @@ public class LoopHandler : MonoBehaviour
     int weeklyCost;
 
     public bool loopOver = false;
+    public MapMovementClass player;
 
     public void Start()
     {
+        player = GameObject.Find("Player").GetComponent<MapMovementClass>();
         sceneShaderImage = sceneShader.GetComponent<Image>();
         SetAlpha(sceneShaderImage, 1f);
         uiHandler = UI.GetComponent<UIHandler>();    
@@ -59,6 +62,8 @@ public class LoopHandler : MonoBehaviour
 
     public IEnumerator StartLoop(int w, int m)
     {
+        player.gameObject.transform.position = new Vector2(player.home.transform.position.x,
+                                                           player.home.transform.position.y);
         week = w;
         uiHandler.UpdateMoney(m);
         uiHandler.UpdateWeek(w);
@@ -76,7 +81,7 @@ public class LoopHandler : MonoBehaviour
             text.text = "";
             text.gameObject.SetActive(false);
         }
-        
+
         weeklyCostHeader.SetActive(false);
         weeklyCostText.text = "";
         weeklyCostText.gameObject.SetActive(false);
@@ -92,7 +97,7 @@ public class LoopHandler : MonoBehaviour
 
     IEnumerator WaitForNoon()
     {
-        yield return new WaitUntil(() => time >= 510);
+        yield return new WaitUntil(() => time >= 1200);
         loopOver = true;
         LoopEnd();
     }
@@ -102,6 +107,10 @@ public class LoopHandler : MonoBehaviour
     {
         if (!loopOver)
         {
+        if (UnityEngine.InputSystem.Keyboard.current.bKey.wasPressedThisFrame)
+        {
+            time = 1e6f;         
+        }
             time += Time.deltaTime * 6;
             uiHandler.UpdateTime((int) time);
         }   
@@ -117,8 +126,10 @@ public class LoopHandler : MonoBehaviour
 
     public void LoopEnd()
     {
+        player.currentPantry = player.home.GetComponent<PantryClass>();
         weeklyCost = 0;
         loopOver = true;
+        uiHandler.interactButton.SetActive(false);
         StartCoroutine(ShowResults());
     }
 
@@ -193,6 +204,7 @@ public class LoopHandler : MonoBehaviour
         }
 
         yield return new WaitForSeconds(2f);
+        uiHandler.ResetBars();
 
         continueButton.SetActive(true);
     }

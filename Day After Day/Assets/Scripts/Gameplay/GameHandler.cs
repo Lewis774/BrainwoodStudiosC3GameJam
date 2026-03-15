@@ -1,9 +1,12 @@
 using System.Collections;
 using UnityEngine;
+using System.Collections.Generic;
+using System.IO;
 
 public class GameHandler : MonoBehaviour
 {
     public LoopHandler loopHandler;
+    public UIHandler uiHandler;
 
     public int score;
     public int money = 2000;
@@ -18,24 +21,50 @@ public class GameHandler : MonoBehaviour
         score = 0;
         loopHandler = GetComponent<LoopHandler>();
         StartCoroutine(RunGameLoops());
+        uiHandler = GameObject.Find("UI").GetComponent<UIHandler>();
     }
 
     IEnumerator RunGameLoops()
     {
         while (currentLoop < totalLoops)
         {
-            next = false;
+            if (currentLoop == 1)
+            {
+                uiHandler.UpdateWeeklyInfo("A Pantry has been Vandalized! Pantries marked with red are no longer accessable."); 
+                PantryClass closedPantry = GameObject.Find("Pantry (1)").GetComponent<PantryClass>();
+                closedPantry.interactable = false;
+                closedPantry.gameObject.GetComponent<SpriteRenderer>().color = Color.red;
+            }
+            if (currentLoop == 3)
+            {
+                //TODO: PANTRIES FOOD *.8
+                //TODO: TELL PLAYER WEATHER HURT FOOD QUALITY
+                uiHandler.UpdateWeeklyInfo("Poor Weather. Pantries now have less food.");
+                GameObject[] pantries = GameObject.FindGameObjectsWithTag("Pantry");
+                foreach (GameObject pantry in pantries)
+                {
+                    int[] food = pantry.GetComponent<PantryClass>().food;
+                    for (int i = 0; i < food.Length; i++)
+                    {
+                        food[i]--;
+                        if (food[i] < 0) food[i] = 0;
+                    }
+                }
 
+            }
+            if (currentLoop == 5)
+            {
+                uiHandler.UpdateWeeklyInfo("Due to neglect, one of the large pantries has closed.");
+                PantryClass closedPantry = GameObject.Find("Large Pantry").GetComponent<PantryClass>();
+                closedPantry.interactable = false;
+                closedPantry.gameObject.GetComponent<SpriteRenderer>().color = Color.red;
+            }
+            next = false;
             StartCoroutine(loopHandler.StartLoop(currentLoop, money));
 
             yield return new WaitUntil(() => next);
 
             money -= (int) loopHandler.GetWeeklyCost();
-
-            if ((currentLoop + 1) % 2 == 0)
-            {
-                // yield return loopHandler.PlayLoopAnimation();
-            }
 
             currentLoop++;
             loopHandler.loopOver = false;

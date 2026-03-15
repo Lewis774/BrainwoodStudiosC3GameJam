@@ -50,13 +50,8 @@ public class PantryClass : MonoBehaviour
                 food[i] = UnityEngine.Random.Range(0, 5);
             }
         }
-        
-
         Jobable = true;
-        
-    
-    
-    }
+    } // Start()
 
     // Helper method to return the closest node in an array of all nodes on the map
     PantryClass getClosestNode (PantryClass[] nodes)
@@ -88,4 +83,17 @@ public class PantryClass : MonoBehaviour
         }
         return tMin;
     } // getClosestNode
+
+    void randomizeJobs(PantryClass[] nodes)
+    {
+        foreach (PantryClass pantry in nodes)
+        {
+            int jobChance = UnityEngine.Random.Range(1, 100);
+            if (jobChance == 1)
+            {
+                pantry.tag = "Job";
+            }
+        }
+        
+    } // randomizeJobs
 }

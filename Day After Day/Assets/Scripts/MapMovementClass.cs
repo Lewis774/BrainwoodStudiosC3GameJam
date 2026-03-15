@@ -8,12 +8,16 @@ public class MapMovementClass : MonoBehaviour
     public PantryClass currentPantry;
     public int savings;
     public LoopHandler LoopHandler;
+    public GameHandler gameHandler;
+    public UIHandler uiHandler;
 
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         LoopHandler = GameObject.Find("Game").GetComponent<LoopHandler>();
+        gameHandler = GameObject.Find("Game").GetComponent<GameHandler>();
+        uiHandler = GameObject.Find("UI").GetComponent<UIHandler>();
 
         currentPantry.gameObject.SetActive(true);
         foreach (PantryClass pantry in currentPantry.closestNodes)
@@ -84,17 +88,24 @@ public class MapMovementClass : MonoBehaviour
         if (currentPantry.tag == "Job" && currentPantry.Jobable)
         {
             currentPantry.Jobable = false;
-            int JobChances = UnityEngine.Random.Range(0,100);
-            if (JobChances < 3)
+            int addedTime = UnityEngine.Random.Range(1, 3);
+            int moneyChance = UnityEngine.Random.Range(1, 100);
+            if (moneyChance < 50)
             {
-                //TODO: Replace with more robust response
-                Debug.Log("You got the job!");
+                gameHandler.money += 25;
+            }
+            else if (moneyChance < 83)
+            {
+                gameHandler.money += 50;
             }
             else
             {
-                //TODO: Replace with more robust response
-                Debug.Log("Sorry, We've decided to go with a more promising candidate.");
+                gameHandler.money += 75;
             }
+
+            //TODO: OVERLAY WORK SCRIPT
+            LoopHandler.time += addedTime;
+            uiHandler.UpdateMoney(gameHandler.money);
         }
         if (currentPantry.tag == "Pantry")
         {

@@ -87,6 +87,7 @@ public class MapMovementClass : MonoBehaviour
         activateNodes(currentPantry);
         if (currentPantry.tag == "Job" && currentPantry.Jobable)
         {
+            uiHandler.interactButton.SetActive(true);
             currentPantry.Jobable = false;
             int addedTime = UnityEngine.Random.Range(1, 3);
             int moneyChance = UnityEngine.Random.Range(1, 100);
@@ -106,16 +107,23 @@ public class MapMovementClass : MonoBehaviour
 
             gameHandler.money += workMoney;
 
+            uiHandler.UpdateInfoPanel(addedTime, "Money Available: $" + workMoney);
+
             //TODO: OVERLAY WORK SCRIPT
             LoopHandler.time += addedTime;
             uiHandler.UpdateMoney(gameHandler.money);
             uiHandler.UpdateGameLog("Worked for $" + workMoney + "!");
         }
-        if (currentPantry.tag == "Pantry" || currentPantry.tag == "LargePantry")
+        else if (currentPantry.tag == "Pantry" || currentPantry.tag == "LargePantry")
         {
+            uiHandler.interactButton.SetActive(true);
             takeFood(currentPantry);
             LoopHandler.Collected();
             uiHandler.UpdateGameLog("Visited Pantry!");
+        }
+        else
+        {
+            uiHandler.interactButton.SetActive(false);
         }
     }
 
@@ -133,6 +141,7 @@ public class MapMovementClass : MonoBehaviour
             p.gameObject.SetActive(true);
         }
     }
+    
     void moveNorth()
     {
         PantryClass nextPantry = null;
@@ -158,6 +167,7 @@ public class MapMovementClass : MonoBehaviour
         transform.position = new Vector2(positions.x, positions.y);
         uiHandler.UpdateGameLog("Moved for " + (int) TravelTime + " min ");
     }
+    
     void moveSouth()
     {
         PantryClass nextPantry = null;
@@ -176,7 +186,6 @@ public class MapMovementClass : MonoBehaviour
         float TravelTime = (distance * 100) % 10;
         currentPantry = nextPantry;
         interact(currentPantry);
-                    
 
         // move the player character to the new node
         playerDistanceTraveled += TravelTime;
@@ -184,6 +193,7 @@ public class MapMovementClass : MonoBehaviour
         transform.position = new Vector2(positions.x, positions.y);
         uiHandler.UpdateGameLog("Moved for " + (int) TravelTime + " min ");        
     }
+    
     void moveEast()
     {
         PantryClass nextPantry = null;
@@ -210,6 +220,7 @@ public class MapMovementClass : MonoBehaviour
         transform.position = new Vector2(positions.x, positions.y);
         uiHandler.UpdateGameLog("Moved for " + (int) TravelTime + " min ");
     }
+    
     void moveWest()
     {
         PantryClass nextPantry = null;
@@ -235,7 +246,5 @@ public class MapMovementClass : MonoBehaviour
         LoopHandler.time += TravelTime;
         transform.position = new Vector2(positions.x, positions.y);
         uiHandler.UpdateGameLog("Moved for " + (int) TravelTime + " min ");
-    }
-
-    
+    } 
 }

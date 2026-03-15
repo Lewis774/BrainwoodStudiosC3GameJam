@@ -90,7 +90,8 @@ public class MapMovementClass : MonoBehaviour
             }
         }
 
-        if (UnityEngine.InputSystem.Keyboard.current.wKey.wasPressedThisFrame)
+        if (UnityEngine.InputSystem.Keyboard.current.wKey.wasPressedThisFrame ||
+            UnityEngine.InputSystem.Keyboard.current.upArrowKey.wasPressedThisFrame)
         {
             PantryClass lastPantry = currentPantry;
             if (!LoopHandler.loopOver) moveNorth();
@@ -99,7 +100,8 @@ public class MapMovementClass : MonoBehaviour
             
             
         }
-        if (UnityEngine.InputSystem.Keyboard.current.aKey.wasPressedThisFrame)
+        if (UnityEngine.InputSystem.Keyboard.current.aKey.wasPressedThisFrame ||
+            UnityEngine.InputSystem.Keyboard.current.leftArrowKey.wasPressedThisFrame)
         {
             PantryClass lastPantry = currentPantry;
             if (!LoopHandler.loopOver) moveWest();
@@ -107,7 +109,8 @@ public class MapMovementClass : MonoBehaviour
             //activateNodes(currentPantry);
             
         }
-        if (UnityEngine.InputSystem.Keyboard.current.sKey.wasPressedThisFrame)
+        if (UnityEngine.InputSystem.Keyboard.current.sKey.wasPressedThisFrame ||
+            UnityEngine.InputSystem.Keyboard.current.downArrowKey.wasPressedThisFrame)
         {
             PantryClass lastPantry = currentPantry;
             if (!LoopHandler.loopOver) moveSouth();
@@ -115,13 +118,13 @@ public class MapMovementClass : MonoBehaviour
             //activateNodes(currentPantry);
             
         }
-        if (UnityEngine.InputSystem.Keyboard.current.dKey.wasPressedThisFrame)
+        if (UnityEngine.InputSystem.Keyboard.current.dKey.wasPressedThisFrame ||
+            UnityEngine.InputSystem.Keyboard.current.rightArrowKey.wasPressedThisFrame)
         {
             PantryClass lastPantry = currentPantry;
             if (!LoopHandler.loopOver) moveEast();
             //deactivateNodes(lastPantry);
             //activateNodes(currentPantry);
-            
         }
     } 
 

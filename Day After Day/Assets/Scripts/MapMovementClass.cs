@@ -6,12 +6,11 @@ public class MapMovementClass : MonoBehaviour
 {
     public double playerDistanceTraveled;
     public PantryClass currentPantry;
-    public int savings;
     public LoopHandler LoopHandler;
     public GameHandler gameHandler;
     public UIHandler uiHandler;
     public GameObject home;
-    public bool canMove;
+
 
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -32,8 +31,6 @@ public class MapMovementClass : MonoBehaviour
         transform.position = new Vector2(positions.x, positions.y);
 
         playerDistanceTraveled = 0;
-
-        canMove = false;
 
     }
 
@@ -77,6 +74,7 @@ public class MapMovementClass : MonoBehaviour
 
     void takeFood(PantryClass currentPantry)
     {
+        if (!currentPantry.Jobable) return;
         for (int i = 0; i < currentPantry.food.Length; i++)
         {
             LoopHandler.foodGathered[i] += currentPantry.food[i];

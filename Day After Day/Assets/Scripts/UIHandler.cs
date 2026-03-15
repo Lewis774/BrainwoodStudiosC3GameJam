@@ -53,7 +53,7 @@ public class UIHandler : MonoBehaviour
         ResetBars();
     }
 
-    void ResetBars()
+    public void ResetBars()
     {
         UpdateBar(proteinBar, 7, defaultGray);
         UpdateBar(vegetableBar, 7, defaultGray);

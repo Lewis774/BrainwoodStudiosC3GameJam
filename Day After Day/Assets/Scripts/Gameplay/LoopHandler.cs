@@ -61,7 +61,6 @@ public class LoopHandler : MonoBehaviour
 
     public IEnumerator StartLoop(int w, int m)
     {
-        player.canMove = true;
         player.gameObject.transform.position = new Vector2(player.home.transform.position.x,
                                                            player.home.transform.position.y);
         week = w;
@@ -123,7 +122,6 @@ public class LoopHandler : MonoBehaviour
     public void LoopEnd()
     {
         player.currentPantry = player.home.GetComponent<PantryClass>();
-        player.canMove = false;
         weeklyCost = 0;
         loopOver = true;
         StartCoroutine(ShowResults());
@@ -200,6 +198,7 @@ public class LoopHandler : MonoBehaviour
         }
 
         yield return new WaitForSeconds(2f);
+        uiHandler.ResetBars();
 
         continueButton.SetActive(true);
     }

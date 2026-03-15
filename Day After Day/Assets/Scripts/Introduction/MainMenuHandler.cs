@@ -1,16 +1,20 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class MainMenuHandler : MonoBehaviour
+public class DontDestroyAudio : MonoBehaviour
 {
-    public void PlayGame()
-    {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
-    }
+    public static DontDestroyAudio Instance;
 
-    public void QuitGame()
+    void Awake()
     {
-        Debug.Log("Game Quitted!");
-        Application.Quit();
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 }
